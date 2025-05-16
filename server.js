@@ -11,7 +11,7 @@ const pool = mysql.createPool({
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
-  port: 3306,
+  port: process.env.MYSQL_PORT || 3306,
   ssl: { ca: fs.readFileSync("./DigiCertGlobalRootCA.crt.pem") },
   waitForConnections: true,
   connectionLimit: 10,
@@ -77,7 +77,7 @@ app.get("/population/:continent", (req, res) => {
       console.error(`Error fetching population for ${continent}:`, err);
       return res.status(500).send("Internal Server Error");
     }
-    const totalPopulation = results[0]?.total_population;
+    const totalPopulation = results[0]?.total_population || 0;
     res.send(`The total population of ${continent} is ${totalPopulation}`);
   });
 });
