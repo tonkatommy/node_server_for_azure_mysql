@@ -5,6 +5,9 @@ require("dotenv").config();
 
 const app = express();
 
+const cors = require("cors");
+app.use(cors());
+
 // Create a connection pool to the database
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST,
@@ -91,12 +94,14 @@ app.get("/population/:continent", (req, res) => {
  */
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  console.log(`Server is live at http://localhost:${PORT}`);
-}).on("error", (error) => {
-  if (error.code === "EADDRINUSE") {
-    console.error("Port is already in use");
-  } else {
-    console.error("Server Error:", error);
-  }
-});
+app
+  .listen(PORT, () => {
+    console.log(`Server is live at http://localhost:${PORT}`);
+  })
+  .on("error", (error) => {
+    if (error.code === "EADDRINUSE") {
+      console.error("Port is already in use");
+    } else {
+      console.error("Server Error:", error);
+    }
+  });
